@@ -1,9 +1,22 @@
 - name: Linux Groups and Users
   hosts: all
+  become: yes
   tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+  - name: Ensure group "developers" exists
+    ansible.builtin.group:
+      name: developers
+      state: present
 
-   - name: Print message
-     ansible.builtin.debug:
-       msg: Hello world
+  - name: Create a user 'johnd' with a home directory
+    ansible.builtin.user:
+      name: johnd
+      create_home: yes
+      group: developers
+      shell: /bin/bash
+      state: present
+
+  - name: Ensure user 'johnd' is in group 'developers'
+    ansible.builtin.user:
+      name: johnd
+      groups: developers
+      append: yes
