@@ -1,0 +1,52 @@
+- name: Clean up Linux Users and Groups Lab
+  hosts: all
+  become: yes
+  tasks:
+    - name: Remove users dev1 to dev10
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      loop:
+        - dev1
+        - dev2
+        - dev3
+        - dev4
+        - dev5
+        - dev6
+        - dev7
+        - dev8
+        - dev9
+        - dev10
+
+    - name: Remove group 'developers'
+      ansible.builtin.group:
+        name: developers
+        state: absent
+
+    - name: Remove group 'testers' if it exists
+      ansible.builtin.group:
+        name: testers
+        state: absent
+
+    - name: Remove group 'admins' if it exists
+      ansible.builtin.group:
+        name: admins
+        state: absent
+
+    - name: Remove user 'nopass' if created
+      ansible.builtin.user:
+        name: nopass
+        state: absent
+        remove: yes
+
+    - name: Remove system user 'sysuser' if created
+      ansible.builtin.user:
+        name: sysuser
+        state: absent
+        remove: yes
+
+    - name: Remove shared directory if it exists
+      ansible.builtin.file:
+        path: /opt/shared
+        state: absent
